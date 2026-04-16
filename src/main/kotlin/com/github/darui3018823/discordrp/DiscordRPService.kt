@@ -11,7 +11,7 @@ import java.util.concurrent.Executors
 class DiscordRPService : Disposable {
 
     companion object {
-        private const val APPLICATION_ID = 0L // TODO: set Discord Application ID
+        private const val APPLICATION_ID = 1494417249736589342L
         private val log = logger<DiscordRPService>()
 
         fun getInstance(): DiscordRPService =
