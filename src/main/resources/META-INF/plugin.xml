@@ -1,0 +1,29 @@
+<idea-plugin>
+    <id>com.github.darui3018823.discordrp</id>
+    <name>Discord Rich Presence</name>
+    <vendor>darui3018823</vendor>
+    <description>Displays JetBrains IDE activity as Discord Rich Presence.</description>
+
+    <idea-version since-build="233"/>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService
+            serviceImplementation="com.github.darui3018823.discordrp.DiscordRPService"/>
+        <projectService
+            serviceImplementation="com.github.darui3018823.discordrp.ProjectRPService"/>
+    </extensions>
+
+    <applicationListeners>
+        <listener
+            class="com.github.darui3018823.discordrp.ProjectListener"
+            topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </applicationListeners>
+
+    <projectListeners>
+        <listener
+            class="com.github.darui3018823.discordrp.FileEditorListener"
+            topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
+    </projectListeners>
+</idea-plugin>
