@@ -2,7 +2,9 @@ package com.github.darui3018823.discordrp
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.logger
+import com.intellij.openapi.project.ProjectManager
 import com.jagrosh.discordipc.IPCClient
 import com.jagrosh.discordipc.IPCListener
 import com.jagrosh.discordipc.entities.RichPresence
@@ -10,6 +12,7 @@ import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.util.concurrent.Executors
 
+@Service(Service.Level.APP)
 class DiscordRPService : Disposable {
 
     companion object {
@@ -36,6 +39,10 @@ class DiscordRPService : Disposable {
         client.setListener(object : IPCListener {
             override fun onReady(client: IPCClient) {
                 log.info("Discord IPC connected")
+                // Update presence for all open projects after connection is established
+                ProjectManager.getInstance().openProjects.forEach { project ->
+                    project.getService(ProjectRPService::class.java)?.updateRichPresence()
+                }
             }
         })
     }

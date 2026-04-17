@@ -42,13 +42,13 @@ class ProjectRPService(private val project: Project) {
 
                 if (langKey != null) {
                     RichPresence.Builder()
-                        .setDetails(file.name)
+                        .setDetails("Editing ${file.name}")
                         .setState(state)
                         .setLargeImage(langKey, "Editing $langName File")
                         .setSmallImage(ideKey, fullVersion)
                 } else {
                     RichPresence.Builder()
-                        .setDetails(file.name)
+                        .setDetails("Editing ${file.name}")
                         .setState(state)
                         .setLargeImage(ideKey, fullVersion)
                         .setSmallImage(ideKey, fullVersion)
