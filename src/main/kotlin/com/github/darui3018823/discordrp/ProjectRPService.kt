@@ -2,7 +2,6 @@ package com.github.darui3018823.discordrp
 
 import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.components.Service
-import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.project.Project
 import com.intellij.util.concurrency.AppExecutorUtil
 import com.intellij.openapi.vfs.VirtualFile
@@ -10,10 +9,6 @@ import com.jagrosh.discordipc.entities.RichPresence
 
 @Service(Service.Level.PROJECT)
 class ProjectRPService(private val project: Project) {
-
-    companion object {
-        private val log = logger<ProjectRPService>()
-    }
 
     @Volatile
     var currentFile: VirtualFile? = null
@@ -32,7 +27,6 @@ class ProjectRPService(private val project: Project) {
         AppExecutorUtil.getAppExecutorService().submit {
             val ideKey = IdeDetector.getAssetKey()
             val fullVersion = IdeDetector.getFullVersionString()
-            log.info("DiscordRP update | productCode=${com.intellij.openapi.application.ApplicationInfo.getInstance().build.productCode} ideKey=$ideKey file=${currentFile?.name} connected=${DiscordRPService.getInstance().isConnected}")
             val projectName = project.name
             val branch = GitBranchDetector.getBranch(project)
             val state = if (branch != null) "$projectName at $branch branch" else projectName

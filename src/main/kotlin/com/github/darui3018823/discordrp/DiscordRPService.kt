@@ -72,14 +72,13 @@ class DiscordRPService : Disposable {
         worker.submit {
             if (!isConnected) return@submit
             try {
-                client.sendRichPresence(
-                    builder.setStartTimestamp(
-                        OffsetDateTime.ofInstant(
-                            java.time.Instant.ofEpochSecond(startTime),
-                            ZoneOffset.UTC
-                        )
-                    ).build()
-                )
+                val presence = builder.setStartTimestamp(
+                    OffsetDateTime.ofInstant(
+                        java.time.Instant.ofEpochSecond(startTime),
+                        ZoneOffset.UTC
+                    )
+                ).build()
+                client.sendRichPresence(presence)
             } catch (e: Exception) {
                 log.warn("Failed to update Discord presence: ${e.message}")
                 isConnected = false
