@@ -1,6 +1,7 @@
 package com.github.darui3018823.discordrp
 
 import org.json.JSONObject
+import com.intellij.notification.Notification
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
@@ -14,6 +15,7 @@ import com.jagrosh.discordipc.IPCListener
 import com.jagrosh.discordipc.entities.RichPresence
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
 
 @Service(Service.Level.APP)
@@ -44,16 +46,20 @@ class DiscordRPService : Disposable {
     @Volatile
     private var notifyOnReconnect = false
 
+    private val activeNotifications = CopyOnWriteArrayList<Notification>()
+
     private val ipcListener = object : IPCListener {
         override fun onReady(client: IPCClient) {
             log.info("Discord IPC connected")
             if (notifyOnReconnect) {
                 notifyOnReconnect = false
                 ApplicationManager.getApplication().invokeLater {
-                    NotificationGroupManager.getInstance()
+                    val n = NotificationGroupManager.getInstance()
                         .getNotificationGroup("DiscordRP")
                         .createNotification("Discord Rich Presence", "Reconnected to Discord.", NotificationType.INFORMATION)
-                        .notify(null)
+                    activeNotifications += n
+                    n.whenExpired { activeNotifications -= n }
+                    n.notify(null)
                 }
             }
             ProjectManager.getInstance().openProjects.forEach { project ->
@@ -78,14 +84,16 @@ class DiscordRPService : Disposable {
     private fun onUnexpectedDisconnect() {
         isConnected = false
         ApplicationManager.getApplication().invokeLater {
-            val notification = NotificationGroupManager.getInstance()
+            val n = NotificationGroupManager.getInstance()
                 .getNotificationGroup("DiscordRP")
                 .createNotification("Discord Rich Presence", "Disconnected from Discord.", NotificationType.WARNING)
-            notification.addAction(NotificationAction.createSimple("Reconnect") {
-                notification.expire()
+            activeNotifications += n
+            n.whenExpired { activeNotifications -= n }
+            n.addAction(NotificationAction.createSimple("Reconnect") {
+                n.expire()
                 reconnect()
             })
-            notification.notify(null)
+            n.notify(null)
         }
     }
 
@@ -143,6 +151,8 @@ class DiscordRPService : Disposable {
 
     override fun dispose() {
         disconnectExpected = true
+        activeNotifications.forEach { it.expire() }
+        activeNotifications.clear()
         if (isConnected) {
             try { client.sendRichPresence(null) } catch (_: Exception) {}
         }
