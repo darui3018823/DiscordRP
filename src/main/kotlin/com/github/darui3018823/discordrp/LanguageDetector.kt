@@ -76,6 +76,8 @@ object LanguageDetector {
         "rb" to "lang_ruby",
         "rs" to "lang_rust",
         "sql" to "lang_sql",
+        "sqlite" to "lang_sql",
+        "sqlite3" to "lang_sql",
         "html" to "lang_html",
         "htm" to "lang_html",
         "css" to "lang_css",
