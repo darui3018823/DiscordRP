@@ -67,6 +67,13 @@ Programming Language & Technology Icons
 The following programming language and technology icons are used in this
 software to identify file types and languages:
 
+  GNU Bash
+    The GNU Bash logo is the official logo of the GNU Bash shell, owned by
+    the Free Software Foundation (FSF) and licensed under the
+    Free Art License 1.3.
+    GNU Bash is a trademark of the Free Software Foundation.
+      https://github.com/odb/official-bash-logo
+
   C
     The C programming language name is used as a generic term.
 
@@ -144,6 +151,14 @@ software to identify file types and languages:
 
   SQL
     SQL is used as a generic term for Structured Query Language.
+
+  SQLite
+    SQLite is a registered trademark of Hipp, Wyrick & Company, Inc.
+    The SQLite source code and documentation have been dedicated to the
+    public domain by the authors. The SQLite logo is licensed under the
+    Creative Commons Attribution-ShareAlike 3.0 License (CC BY-SA 3.0).
+      https://creativecommons.org/licenses/by-sa/3.0/
+      https://sqlite.org/copyright.html
 
   YAML
     YAML is used as a generic term for the data serialization format.

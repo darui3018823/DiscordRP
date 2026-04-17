@@ -64,6 +64,13 @@ Android は Google LLC の商標です。
 本ソフトウェアでは、ファイルタイプおよび言語を識別するために以下の
 プログラミング言語・技術アイコンを使用しています：
 
+  GNU Bash
+    GNU Bash ロゴは GNU Bash シェルの公式ロゴであり、
+    Free Software Foundation (FSF) が所有し、Free Art License 1.3 の
+    下でライセンスされています。
+    GNU Bash は Free Software Foundation の商標です。
+      https://github.com/odb/official-bash-logo
+
   C
     C プログラミング言語名は一般用語として使用しています。
 
@@ -137,6 +144,14 @@ Android は Google LLC の商標です。
 
   SQL
     SQL は Structured Query Language の一般用語として使用しています。
+
+  SQLite
+    SQLite は Hipp, Wyrick & Company, Inc. の登録商標です。
+    SQLite のソースコードおよびドキュメントは著者によりパブリックドメインに
+    提供されています。SQLite ロゴは Creative Commons 表示-継承 3.0 ライセンス
+    (CC BY-SA 3.0) の下で提供されています。
+      https://creativecommons.org/licenses/by-sa/3.0/
+      https://sqlite.org/copyright.html
 
   YAML
     YAML はデータシリアライゼーションフォーマットの一般用語として使用しています。
