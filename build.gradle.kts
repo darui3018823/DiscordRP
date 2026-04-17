@@ -1,6 +1,6 @@
 plugins {
     id("org.jetbrains.intellij.platform") version "2.14.0"
-    kotlin("jvm") version "2.1.0"
+    kotlin("jvm") version "2.3.20"
 }
 
 group = "com.github.darui3018823"
