@@ -28,7 +28,7 @@ class ProjectRPService(private val project: Project) {
             val ideKey = IdeDetector.getAssetKey()
             val fullVersion = IdeDetector.getFullVersionString()
             val projectName = project.name
-            val branch = GitBranchDetector.getBranch(project)
+            val branch = ReadAction.compute<String?, Throwable> { GitBranchDetector.getBranch(project) }
             val state = if (branch != null) "$projectName at $branch branch" else projectName
 
             val file = currentFile
