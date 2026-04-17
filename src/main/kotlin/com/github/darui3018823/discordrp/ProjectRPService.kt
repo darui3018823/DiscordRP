@@ -40,19 +40,12 @@ class ProjectRPService(private val project: Project) {
                     LanguageDetector.getDisplayName(file, project)
                 }
 
-                if (langKey != null) {
-                    RichPresence.Builder()
-                        .setDetails("Editing ${file.name}")
-                        .setState(state)
-                        .setLargeImage(langKey, "Editing $langName File")
-                        .setSmallImage(ideKey, fullVersion)
-                } else {
-                    RichPresence.Builder()
-                        .setDetails("Editing ${file.name}")
-                        .setState(state)
-                        .setLargeImage(ideKey, fullVersion)
-                        .setSmallImage(ideKey, fullVersion)
-                }
+                val effectiveLangKey = langKey ?: langName.lowercase().replace(" ", "_")
+                RichPresence.Builder()
+                    .setDetails("Editing ${file.name}")
+                    .setState(state)
+                    .setLargeImage(effectiveLangKey, "Editing $langName File")
+                    .setSmallImage(ideKey, fullVersion)
             } else {
                 RichPresence.Builder()
                     .setState(state)

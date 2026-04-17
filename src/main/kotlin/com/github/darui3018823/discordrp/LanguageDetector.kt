@@ -8,7 +8,6 @@ object LanguageDetector {
 
     private val languageIdToKey = mapOf(
         "kotlin" to "lang_kotlin",
-        "JAVA" to "lang_java",
         "JavaScript" to "lang_js",
         "TypeScript" to "lang_ts",
         "Python" to "lang_python",
@@ -27,15 +26,13 @@ object LanguageDetector {
         "yaml" to "lang_yaml",
         "Shell Script" to "lang_shell",
         "bash" to "lang_shell",
-        "zsh" to "lang_shell",
-        "PowerShell" to "lang_shell",
-        "XML" to "lang_xml",
+        "zsh" to "lang_zsh",
+        "PowerShell" to "lang_pwsh",
         "Dockerfile" to "lang_docker",
     )
 
     private val fileTypeNameToKey = mapOf(
         "Kotlin" to "lang_kotlin",
-        "JAVA" to "lang_java",
         "JavaScript" to "lang_js",
         "TypeScript" to "lang_ts",
         "Python" to "lang_python",
@@ -53,20 +50,19 @@ object LanguageDetector {
         "JSON" to "lang_json",
         "YAML" to "lang_yaml",
         "Shell Script" to "lang_shell",
-        "XML" to "lang_xml",
+        "PowerShell" to "lang_pwsh",
         "Dockerfile" to "lang_docker",
     )
 
     private val extensionToKey = mapOf(
         "kt" to "lang_kotlin",
         "kts" to "lang_kotlin",
-        "java" to "lang_java",
         "js" to "lang_js",
         "mjs" to "lang_js",
         "cjs" to "lang_js",
+        "jsx" to "lang_react",
         "ts" to "lang_ts",
-        "tsx" to "lang_ts",
-        "jsx" to "lang_js",
+        "tsx" to "lang_react",
         "py" to "lang_python",
         "go" to "lang_go",
         "c" to "lang_c",
@@ -91,12 +87,11 @@ object LanguageDetector {
         "yaml" to "lang_yaml",
         "yml" to "lang_yaml",
         "sh" to "lang_shell",
-        "zsh" to "lang_shell",
         "bash" to "lang_shell",
         "cmd" to "lang_shell",
         "bat" to "lang_shell",
-        "ps1" to "lang_shell",
-        "xml" to "lang_xml",
+        "zsh" to "lang_zsh",
+        "ps1" to "lang_pwsh",
         "dockerfile" to "lang_docker",
     )
 
