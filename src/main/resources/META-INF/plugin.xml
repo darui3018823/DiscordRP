@@ -2,7 +2,39 @@
     <id>com.github.darui3018823.discordrp</id>
     <name>Discord Rich Presence</name>
     <vendor>darui3018823</vendor>
-    <description>Displays JetBrains IDE activity as Discord Rich Presence.</description>
+    <description><![CDATA[
+        <p>Displays your JetBrains IDE activity as Discord Rich Presence.</p>
+
+        <h2>Features</h2>
+        <ul>
+            <li>Shows the IDE logo and version as the large icon</li>
+            <li>Shows the language icon of the file you are editing</li>
+            <li>Displays the project name and current Git branch</li>
+            <li>Displays the name of the file being edited</li>
+            <li>Shows continuous playtime since the IDE was opened</li>
+            <li>Reconnect notification when Discord is closed and reopened</li>
+        </ul>
+
+        <h2>Supported Languages</h2>
+        <p>
+            Kotlin, JavaScript, TypeScript, React (JSX/TSX), Python, Go,
+            C, C++, C#, PHP, Ruby, Rust, SQL/SQLite, HTML, CSS, Markdown,
+            JSON, YAML, Shell/Bash, Zsh, PowerShell, Dockerfile
+        </p>
+
+        <h2>Requirements</h2>
+        <ul>
+            <li>JetBrains IDE 2023.3 or later</li>
+            <li>Discord desktop app (must be running)</li>
+        </ul>
+
+        <h2>Notes</h2>
+        <ul>
+            <li>No configuration required — works automatically when Discord is running.</li>
+            <li>If Discord is not running, the plugin starts silently without errors.</li>
+            <li>A notification with a Reconnect button is shown if Discord disconnects.</li>
+        </ul>
+    ]]></description>
 
     <idea-version since-build="233"/>
 
