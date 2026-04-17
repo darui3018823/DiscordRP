@@ -6,6 +6,8 @@ import com.intellij.openapi.diagnostic.logger
 import com.jagrosh.discordipc.IPCClient
 import com.jagrosh.discordipc.IPCListener
 import com.jagrosh.discordipc.entities.RichPresence
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import java.util.concurrent.Executors
 
 class DiscordRPService : Disposable {
@@ -67,7 +69,12 @@ class DiscordRPService : Disposable {
             if (!isConnected) return@submit
             try {
                 client.sendRichPresence(
-                    builder.setStartTimestamp(startTime).build()
+                    builder.setStartTimestamp(
+                        OffsetDateTime.ofInstant(
+                            java.time.Instant.ofEpochSecond(startTime),
+                            ZoneOffset.UTC
+                        )
+                    ).build()
                 )
             } catch (e: Exception) {
                 log.warn("Failed to update Discord presence: ${e.message}")

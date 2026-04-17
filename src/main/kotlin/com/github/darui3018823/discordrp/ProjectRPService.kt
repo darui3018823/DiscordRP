@@ -3,7 +3,7 @@ package com.github.darui3018823.discordrp
 import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.concurrent.AppExecutorUtil
+import com.intellij.util.concurrency.AppExecutorUtil
 import com.intellij.openapi.vfs.VirtualFile
 import com.jagrosh.discordipc.entities.RichPresence
 

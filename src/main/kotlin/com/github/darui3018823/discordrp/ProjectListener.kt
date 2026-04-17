@@ -3,6 +3,7 @@ package com.github.darui3018823.discordrp
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
 
+@Suppress("OVERRIDE_DEPRECATION")
 class ProjectListener : ProjectManagerListener {
 
     override fun projectOpened(project: Project) {

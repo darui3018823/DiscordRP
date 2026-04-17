@@ -1,13 +1,8 @@
 pluginManagement {
     repositories {
-        maven("https://packages.jetbrains.com/repositories/public")
-        gradlePluginPortal()
+        maven("https://plugins.gradle.org/m2/")
         mavenCentral()
     }
-}
-
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
 rootProject.name = "DiscordRP"
