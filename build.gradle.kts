@@ -1,6 +1,7 @@
 plugins {
     id("org.jetbrains.intellij.platform") version "2.14.0"
     kotlin("jvm") version "2.1.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.7"
 }
 
 group = "com.github.darui3018823"
