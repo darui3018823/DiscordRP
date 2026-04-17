@@ -1,6 +1,6 @@
 plugins {
     id("org.jetbrains.intellij.platform") version "2.14.0"
-    kotlin("jvm") version "2.1.0"
+    kotlin("jvm") version "2.3.20"
     id("io.gitlab.arturbosch.detekt") version "1.23.7"
 }
 
@@ -21,8 +21,8 @@ dependencies {
         bundledPlugin("Git4Idea")
     }
     implementation("com.github.jagrosh:DiscordIPC:a8d6631cc9")
-    implementation("net.java.dev.jna:jna:5.14.0")
-    implementation("net.java.dev.jna:jna-platform:5.14.0")
+    implementation("net.java.dev.jna:jna:5.18.1")
+    implementation("net.java.dev.jna:jna-platform:5.18.1")
 }
 
 intellijPlatform {
