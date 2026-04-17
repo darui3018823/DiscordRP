@@ -62,12 +62,9 @@ class DiscordRPService : Disposable {
 
     fun disconnect() {
         worker.submit {
-            try {
-                client.close()
-            } catch (_: Exception) {
-            } finally {
-                isConnected = false
-            }
+            isConnected = false
+            try { client.sendRichPresence(null) } catch (_: Exception) {}
+            try { client.close() } catch (_: Exception) {}
         }
     }
 
@@ -91,10 +88,11 @@ class DiscordRPService : Disposable {
     }
 
     override fun dispose() {
-        worker.shutdownNow()
-        try {
-            client.close()
-        } catch (_: Exception) {
+        // Clear presence immediately before shutdown so Discord removes it without waiting for timeout
+        if (isConnected) {
+            try { client.sendRichPresence(null) } catch (_: Exception) {}
         }
+        worker.shutdownNow()
+        try { client.close() } catch (_: Exception) {}
     }
 }
