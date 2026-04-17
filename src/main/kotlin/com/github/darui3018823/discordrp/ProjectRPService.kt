@@ -40,7 +40,7 @@ class ProjectRPService(private val project: Project) {
                     LanguageDetector.getDisplayName(file, project)
                 }
 
-                val effectiveLangKey = langKey ?: langName.lowercase().replace(" ", "_")
+                val effectiveLangKey = langKey ?: "text"
                 RichPresence.Builder()
                     .setDetails("Editing ${file.name}")
                     .setState(state)
