@@ -1,5 +1,9 @@
 package com.github.darui3018823.discordrp
 
+import org.json.JSONObject
+import com.intellij.notification.NotificationAction
+import com.intellij.notification.NotificationGroupManager
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
@@ -23,7 +27,6 @@ class DiscordRPService : Disposable {
             ApplicationManager.getApplication().getService(DiscordRPService::class.java)
     }
 
-    private val client = IPCClient(APPLICATION_ID)
     private val worker = Executors.newSingleThreadExecutor { r ->
         Thread(r, "DiscordRP-IPC").apply { isDaemon = true }
     }
@@ -35,16 +38,40 @@ class DiscordRPService : Disposable {
     @Volatile
     private var startTime: Long = 0L
 
-    init {
-        client.setListener(object : IPCListener {
-            override fun onReady(client: IPCClient) {
-                log.info("Discord IPC connected")
-                // Update presence for all open projects after connection is established
-                ProjectManager.getInstance().openProjects.forEach { project ->
-                    project.getService(ProjectRPService::class.java)?.updateRichPresence()
-                }
+    @Volatile
+    private var disconnectExpected = false
+
+    private val ipcListener = object : IPCListener {
+        override fun onReady(client: IPCClient) {
+            log.info("Discord IPC connected")
+            ProjectManager.getInstance().openProjects.forEach { project ->
+                project.getService(ProjectRPService::class.java)?.updateRichPresence()
             }
-        })
+        }
+
+        override fun onClose(client: IPCClient, json: JSONObject) {
+            if (!disconnectExpected) onUnexpectedDisconnect()
+        }
+
+        override fun onDisconnect(client: IPCClient, t: Throwable) {
+            if (!disconnectExpected) onUnexpectedDisconnect()
+        }
+    }
+
+    @Volatile
+    private var client = newClient()
+
+    private fun newClient(): IPCClient = IPCClient(APPLICATION_ID).also { it.setListener(ipcListener) }
+
+    private fun onUnexpectedDisconnect() {
+        isConnected = false
+        ApplicationManager.getApplication().invokeLater {
+            NotificationGroupManager.getInstance()
+                .getNotificationGroup("DiscordRP")
+                .createNotification("Discord Rich Presence", "Disconnected from Discord.", NotificationType.WARNING)
+                .addAction(NotificationAction.createSimple("Reconnect") { reconnect() })
+                .notify(null)
+        }
     }
 
     fun connect() {
@@ -60,11 +87,23 @@ class DiscordRPService : Disposable {
         }
     }
 
+    fun reconnect() {
+        worker.submit {
+            disconnectExpected = true
+            try { client.close() } catch (_: Exception) {}
+            client = newClient()
+            disconnectExpected = false
+        }
+        connect()
+    }
+
     fun disconnect() {
         worker.submit {
+            disconnectExpected = true
             isConnected = false
             try { client.sendRichPresence(null) } catch (_: Exception) {}
             try { client.close() } catch (_: Exception) {}
+            disconnectExpected = false
         }
     }
 
@@ -87,7 +126,7 @@ class DiscordRPService : Disposable {
     }
 
     override fun dispose() {
-        // Clear presence immediately before shutdown so Discord removes it without waiting for timeout
+        disconnectExpected = true
         if (isConnected) {
             try { client.sendRichPresence(null) } catch (_: Exception) {}
         }

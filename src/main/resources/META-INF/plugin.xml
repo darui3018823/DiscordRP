@@ -13,6 +13,7 @@
             serviceImplementation="com.github.darui3018823.discordrp.DiscordRPService"/>
         <projectService
             serviceImplementation="com.github.darui3018823.discordrp.ProjectRPService"/>
+        <notificationGroup id="DiscordRP" displayType="BALLOON"/>
     </extensions>
 
     <applicationListeners>
