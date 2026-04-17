@@ -41,9 +41,21 @@ class DiscordRPService : Disposable {
     @Volatile
     private var disconnectExpected = false
 
+    @Volatile
+    private var notifyOnReconnect = false
+
     private val ipcListener = object : IPCListener {
         override fun onReady(client: IPCClient) {
             log.info("Discord IPC connected")
+            if (notifyOnReconnect) {
+                notifyOnReconnect = false
+                ApplicationManager.getApplication().invokeLater {
+                    NotificationGroupManager.getInstance()
+                        .getNotificationGroup("DiscordRP")
+                        .createNotification("Discord Rich Presence", "Reconnected to Discord.", NotificationType.INFORMATION)
+                        .notify(null)
+                }
+            }
             ProjectManager.getInstance().openProjects.forEach { project ->
                 project.getService(ProjectRPService::class.java)?.updateRichPresence()
             }
@@ -66,11 +78,14 @@ class DiscordRPService : Disposable {
     private fun onUnexpectedDisconnect() {
         isConnected = false
         ApplicationManager.getApplication().invokeLater {
-            NotificationGroupManager.getInstance()
+            val notification = NotificationGroupManager.getInstance()
                 .getNotificationGroup("DiscordRP")
                 .createNotification("Discord Rich Presence", "Disconnected from Discord.", NotificationType.WARNING)
-                .addAction(NotificationAction.createSimple("Reconnect") { reconnect() })
-                .notify(null)
+            notification.addAction(NotificationAction.createSimple("Reconnect") {
+                notification.expire()
+                reconnect()
+            })
+            notification.notify(null)
         }
     }
 
@@ -88,6 +103,7 @@ class DiscordRPService : Disposable {
     }
 
     fun reconnect() {
+        notifyOnReconnect = true
         worker.submit {
             disconnectExpected = true
             try { client.close() } catch (_: Exception) {}
