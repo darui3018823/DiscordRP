@@ -34,10 +34,10 @@ class ProjectRPService(private val project: Project) {
             val file = currentFile
             val builder = if (file != null) {
                 val langKey = ReadAction.compute<String?, Throwable> {
-                    LanguageDetector.getAssetKey(file, project)
+                    LanguageDetector.getAssetKey(file)
                 }
                 val langName = ReadAction.compute<String, Throwable> {
-                    LanguageDetector.getDisplayName(file, project)
+                    LanguageDetector.getDisplayName(file)
                 }
 
                 val effectiveLangKey = langKey ?: "text"

@@ -23,6 +23,7 @@ class DiscordRPService : Disposable {
 
     companion object {
         private const val APPLICATION_ID = 1494417249736589342L
+        private const val MILLIS_TO_SECONDS = 1000L
         private val log = logger<DiscordRPService>()
 
         fun getInstance(): DiscordRPService =
@@ -54,9 +55,13 @@ class DiscordRPService : Disposable {
             if (notifyOnReconnect) {
                 notifyOnReconnect = false
                 ApplicationManager.getApplication().invokeLater {
-                    val n = NotificationGroupManager.getInstance()
+                    val notificationGroup = NotificationGroupManager.getInstance()
                         .getNotificationGroup("DiscordRP")
-                        .createNotification("Discord Rich Presence", "Reconnected to Discord.", NotificationType.INFORMATION)
+                    val n = notificationGroup.createNotification(
+                        "Discord Rich Presence",
+                        "Reconnected to Discord.",
+                        NotificationType.INFORMATION
+                    )
                     activeNotifications += n
                     n.whenExpired { activeNotifications -= n }
                     n.notify(null)
@@ -102,7 +107,7 @@ class DiscordRPService : Disposable {
         worker.submit {
             try {
                 client.connect()
-                startTime = System.currentTimeMillis() / 1000L
+                startTime = System.currentTimeMillis() / MILLIS_TO_SECONDS
                 isConnected = true
             } catch (e: Exception) {
                 log.info("Discord IPC connection failed (Discord may not be running): ${e.message}")

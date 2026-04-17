@@ -97,7 +97,7 @@ object LanguageDetector {
         "dockerfile" to "lang_docker",
     )
 
-    fun getAssetKey(file: VirtualFile, project: Project): String? {
+    fun getAssetKey(file: VirtualFile): String? {
         val language = LanguageUtil.getFileLanguage(file)
         if (language != null) {
             languageIdToKey[language.id]?.let { return it }
@@ -116,7 +116,7 @@ object LanguageDetector {
         return null
     }
 
-    fun getDisplayName(file: VirtualFile, project: Project): String {
+    fun getDisplayName(file: VirtualFile): String {
         val language = LanguageUtil.getFileLanguage(file)
         if (language != null) return language.displayName
         return file.fileType.description.ifBlank { file.fileType.name }

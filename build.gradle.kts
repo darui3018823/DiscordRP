@@ -41,3 +41,7 @@ intellijPlatform {
 kotlin {
     jvmToolchain(21)
 }
+
+detekt {
+    config.setFrom("$projectDir/detekt.yml")
+}
