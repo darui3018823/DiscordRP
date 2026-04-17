@@ -1,12 +1,9 @@
-NOTICE（表記）
-==============
+# NOTICE（表記）
 
 本ソフトウェアは、以下のサードパーティ製品および技術に関連するアイコンおよびブランドアセットを使用しています。すべての商標はそれぞれの所有者の財産です。本ソフトウェアは、以下に記載する商標権者とは一切関係なく、いかなる形での推薦・承認・スポンサーシップも受けていません。
 
 
-------------------------------------------------------------------------
-JetBrains s.r.o.
-------------------------------------------------------------------------
+## JetBrains s.r.o.
 
 本ソフトウェアでは以下の JetBrains 製品名およびロゴを使用しています：
 
@@ -41,10 +38,14 @@ https://www.jetbrains.com/company/brand/#section=usage-trademarks
 本ソフトウェアは JetBrains の公式製品ではなく、JetBrains s.r.o. との
 提携・推薦関係はありません。
 
+<br>
 
-------------------------------------------------------------------------
-Google LLC
-------------------------------------------------------------------------
+---
+
+<br>
+
+## Google LLC
+### Android Studio
 
 Android Studio は Google LLC の商標です。Android Studio のロゴおよび
 関連ブランドアセットは Google LLC の財産であり、製品の識別のみを目的として
@@ -56,10 +57,21 @@ Android は Google LLC の商標です。
 詳細については以下を参照してください：<br>
 https://developer.android.com/distribute/marketing-tools/brand-guidelines
 
+### Google Material Icons
+Copyright © Google LLC<br>
+Material Icons および Material Symbols は Google LLC が提供し、
+Apache License, Version 2.0 の下でライセンスされています。<br>
 
-------------------------------------------------------------------------
-プログラミング言語・技術アイコン
-------------------------------------------------------------------------
+https://github.com/google/material-design-icons<br>
+http://www.apache.org/licenses/LICENSE-2.0
+
+<br>
+
+---
+
+<br>
+
+## プログラミング言語・技術アイコン
 
 本ソフトウェアでは、ファイルタイプおよび言語を識別するために以下の
 プログラミング言語・技術アイコンを使用しています：
@@ -183,8 +195,12 @@ https://developer.android.com/distribute/marketing-tools/brand-guidelines
 - YAML<br>
   YAML はデータシリアライゼーションフォーマットの一般用語として使用しています。
 
+<br>
 
-------------------------------------------------------------------------
+---
+
+<br>
+
 一般表記
 ------------------------------------------------------------------------
 

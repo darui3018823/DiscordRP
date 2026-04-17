@@ -1,12 +1,9 @@
-NOTICE (Attribution)
-====================
+# NOTICE (Attribution)
 
 This software uses icons and brand assets related to the following third-party products and technologies. All trademarks are the property of their respective owners. This software is not affiliated with, endorsed by, or sponsored by any of the trademark holders mentioned below in any way.
 
 
-------------------------------------------------------------------------
-JetBrains s.r.o.
-------------------------------------------------------------------------
+## JetBrains s.r.o.
 
 This software uses the following JetBrains product names and logos:
 
@@ -41,10 +38,14 @@ https://www.jetbrains.com/company/brand/#section=usage-trademarks
 This software is not an official product of JetBrains, and is not affiliated
 with or endorsed by JetBrains s.r.o.
 
+<br>
 
-------------------------------------------------------------------------
-Google LLC
-------------------------------------------------------------------------
+---
+
+<br>
+
+## Google LLC
+### Android Studio
 
 Android Studio is a trademark of Google LLC. The Android Studio logo and
 related brand assets are the property of Google LLC, and are used solely for
@@ -56,10 +57,21 @@ This software is not affiliated with, endorsed by, or sponsored by Google LLC.
 For more information, see:<br>
 https://developer.android.com/distribute/marketing-tools/brand-guidelines
 
+Google Material Icons<br>
+Copyright © Google LLC<br>
+Material Icons and Material Symbols are provided by Google LLC and are
+licensed under the Apache License, Version 2.0.<br>
+https://github.com/google/material-design-icons<br>
+http://www.apache.org/licenses/LICENSE-2.0
 
-------------------------------------------------------------------------
-Programming Languages and Technology Icons
-------------------------------------------------------------------------
+<br>
+
+---
+
+<br>
+
+## Programming Languages and Technology Icons
+
 
 This software uses the following programming language and technology icons to
 identify file types and languages:
@@ -183,10 +195,14 @@ identify file types and languages:
 - YAML<br>
   YAML is used as a generic term for data serialization formats.
 
+<br>
 
-------------------------------------------------------------------------
-General Attribution
-------------------------------------------------------------------------
+---
+
+<br>
+
+# General Attribution
+
 
 All product names, logos, and trademarks are the property of their respective
 owners. The use of these names, logos, and trademarks is for identification
