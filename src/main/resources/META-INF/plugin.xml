@@ -47,6 +47,8 @@
         <projectService
             serviceImplementation="com.github.darui3018823.discordrp.ProjectRPService"/>
         <notificationGroup id="DiscordRP" displayType="BALLOON"/>
+        <postStartupActivity
+            implementation="com.github.darui3018823.discordrp.DiscordRPStartupActivity"/>
     </extensions>
 
     <applicationListeners>

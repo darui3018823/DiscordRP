@@ -10,11 +10,6 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.project.ProjectManager
-import com.jagrosh.discordipc.IPCClient
-import com.jagrosh.discordipc.IPCListener
-import com.jagrosh.discordipc.entities.RichPresence
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
 
@@ -49,42 +44,34 @@ class DiscordRPService : Disposable {
 
     private val activeNotifications = CopyOnWriteArrayList<Notification>()
 
-    private val ipcListener = object : IPCListener {
-        override fun onReady(client: IPCClient) {
-            log.info("Discord IPC connected")
-            if (notifyOnReconnect) {
-                notifyOnReconnect = false
-                ApplicationManager.getApplication().invokeLater {
-                    val notificationGroup = NotificationGroupManager.getInstance()
-                        .getNotificationGroup("DiscordRP")
-                    val n = notificationGroup.createNotification(
-                        "Discord Rich Presence",
-                        "Reconnected to Discord.",
-                        NotificationType.INFORMATION
-                    )
-                    activeNotifications += n
-                    n.whenExpired { activeNotifications -= n }
-                    n.notify(null)
+    private fun newClient(): DiscordIpcClient = DiscordIpcClient(APPLICATION_ID).also { client ->
+        client.listener = object : DiscordIpcClient.Listener {
+            override fun onReady() {
+                log.info("Discord IPC connected")
+                if (notifyOnReconnect) {
+                    notifyOnReconnect = false
+                    ApplicationManager.getApplication().invokeLater {
+                        val n = NotificationGroupManager.getInstance()
+                            .getNotificationGroup("DiscordRP")
+                            .createNotification("Discord Rich Presence", "Reconnected to Discord.", NotificationType.INFORMATION)
+                        activeNotifications += n
+                        n.whenExpired { activeNotifications -= n }
+                        n.notify(null)
+                    }
+                }
+                ProjectManager.getInstance().openProjects.forEach { project ->
+                    project.getService(ProjectRPService::class.java)?.updateRichPresence()
                 }
             }
-            ProjectManager.getInstance().openProjects.forEach { project ->
-                project.getService(ProjectRPService::class.java)?.updateRichPresence()
+
+            override fun onDisconnect(error: Throwable?) {
+                if (!disconnectExpected) onUnexpectedDisconnect()
             }
-        }
-
-        override fun onClose(client: IPCClient, json: JSONObject) {
-            if (!disconnectExpected) onUnexpectedDisconnect()
-        }
-
-        override fun onDisconnect(client: IPCClient, t: Throwable) {
-            if (!disconnectExpected) onUnexpectedDisconnect()
         }
     }
 
     @Volatile
     private var client = newClient()
-
-    private fun newClient(): IPCClient = IPCClient(APPLICATION_ID).also { it.setListener(ipcListener) }
 
     private fun onUnexpectedDisconnect() {
         isConnected = false
@@ -122,6 +109,7 @@ class DiscordRPService : Disposable {
             try { client.close() } catch (_: Exception) {}
             client = newClient()
             disconnectExpected = false
+            isConnected = false
         }
         connect()
     }
@@ -130,23 +118,17 @@ class DiscordRPService : Disposable {
         worker.submit {
             disconnectExpected = true
             isConnected = false
-            try { client.sendRichPresence(null) } catch (_: Exception) {}
+            try { client.sendActivity(null) } catch (_: Exception) {}
             try { client.close() } catch (_: Exception) {}
             disconnectExpected = false
         }
     }
 
-    fun updatePresence(builder: RichPresence.Builder) {
+    fun updatePresence(activity: JSONObject?) {
         worker.submit {
             if (!isConnected) return@submit
             try {
-                val presence = builder.setStartTimestamp(
-                    OffsetDateTime.ofInstant(
-                        java.time.Instant.ofEpochSecond(startTime),
-                        ZoneOffset.UTC
-                    )
-                ).build()
-                client.sendRichPresence(presence)
+                client.sendActivity(activity)
             } catch (e: Exception) {
                 log.warn("Failed to update Discord presence: ${e.message}")
                 isConnected = false
@@ -159,7 +141,7 @@ class DiscordRPService : Disposable {
         activeNotifications.forEach { it.expire() }
         activeNotifications.clear()
         if (isConnected) {
-            try { client.sendRichPresence(null) } catch (_: Exception) {}
+            try { client.sendActivity(null) } catch (_: Exception) {}
         }
         worker.shutdownNow()
         try { client.close() } catch (_: Exception) {}

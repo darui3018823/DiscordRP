@@ -5,7 +5,8 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import com.intellij.util.concurrency.AppExecutorUtil
 import com.intellij.openapi.vfs.VirtualFile
-import com.jagrosh.discordipc.entities.RichPresence
+import org.json.JSONObject
+import java.time.Instant
 
 @Service(Service.Level.PROJECT)
 class ProjectRPService(private val project: Project) {
@@ -31,28 +32,29 @@ class ProjectRPService(private val project: Project) {
             val branch = ReadAction.compute<String?, Throwable> { GitBranchDetector.getBranch(project) }
             val state = if (branch != null) "$projectName at $branch branch" else projectName
 
-            val file = currentFile
-            val builder = if (file != null) {
-                val langKey = ReadAction.compute<String?, Throwable> {
-                    LanguageDetector.getAssetKey(file)
-                }
-                val langName = ReadAction.compute<String, Throwable> {
-                    LanguageDetector.getDisplayName(file)
-                }
+            val timestamps = JSONObject().put("start", Instant.now().epochSecond)
 
+            val activity = JSONObject().put("state", state).put("timestamps", timestamps)
+
+            val file = currentFile
+            if (file != null) {
+                val langKey = ReadAction.compute<String?, Throwable> { LanguageDetector.getAssetKey(file) }
+                val langName = ReadAction.compute<String, Throwable> { LanguageDetector.getDisplayName(file) }
                 val effectiveLangKey = langKey ?: "text"
-                RichPresence.Builder()
-                    .setDetails("Editing ${file.name}")
-                    .setState(state)
-                    .setLargeImage(effectiveLangKey, "Editing $langName File")
-                    .setSmallImage(ideKey, fullVersion)
+
+                activity.put("details", "Editing ${file.name}")
+                activity.put("assets", JSONObject()
+                    .put("large_image", effectiveLangKey)
+                    .put("large_text", "Editing $langName File")
+                    .put("small_image", ideKey)
+                    .put("small_text", fullVersion))
             } else {
-                RichPresence.Builder()
-                    .setState(state)
-                    .setLargeImage(ideKey, fullVersion)
+                activity.put("assets", JSONObject()
+                    .put("large_image", ideKey)
+                    .put("large_text", fullVersion))
             }
 
-            DiscordRPService.getInstance().updatePresence(builder)
+            DiscordRPService.getInstance().updatePresence(activity)
         }
     }
 }
