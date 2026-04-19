@@ -12,6 +12,7 @@ import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.project.ProjectManager
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 @Service(Service.Level.APP)
 class DiscordRPService : Disposable {
@@ -92,6 +93,7 @@ class DiscordRPService : Disposable {
     fun connect() {
         if (isConnected) return
         worker.submit {
+            if (isConnected) return@submit
             try {
                 client.connect()
                 startTime = System.currentTimeMillis() / MILLIS_TO_SECONDS
@@ -106,12 +108,18 @@ class DiscordRPService : Disposable {
         notifyOnReconnect = true
         worker.submit {
             disconnectExpected = true
+            isConnected = false
             try { client.close() } catch (_: Exception) {}
             client = newClient()
             disconnectExpected = false
-            isConnected = false
+            try {
+                client.connect()
+                startTime = System.currentTimeMillis() / MILLIS_TO_SECONDS
+                isConnected = true
+            } catch (e: Exception) {
+                log.info("Discord IPC reconnect failed: ${e.message}")
+            }
         }
-        connect()
     }
 
     fun disconnect() {
@@ -120,6 +128,7 @@ class DiscordRPService : Disposable {
             isConnected = false
             try { client.sendActivity(null) } catch (_: Exception) {}
             try { client.close() } catch (_: Exception) {}
+            client = newClient()
             disconnectExpected = false
         }
     }
@@ -138,12 +147,16 @@ class DiscordRPService : Disposable {
 
     override fun dispose() {
         disconnectExpected = true
+        isConnected = false
         activeNotifications.forEach { it.expire() }
         activeNotifications.clear()
-        if (isConnected) {
-            try { client.sendActivity(null) } catch (_: Exception) {}
+        worker.shutdown()
+        try {
+            if (!worker.awaitTermination(2, TimeUnit.SECONDS)) worker.shutdownNow()
+        } catch (_: InterruptedException) {
+            worker.shutdownNow()
         }
-        worker.shutdownNow()
+        try { client.sendActivity(null) } catch (_: Exception) {}
         try { client.close() } catch (_: Exception) {}
     }
 }
