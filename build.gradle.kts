@@ -1,6 +1,6 @@
 plugins {
     id("org.jetbrains.intellij.platform") version "2.14.0"
-    kotlin("jvm") version "2.3.20"
+    kotlin("jvm") version "2.3.21"
     id("io.gitlab.arturbosch.detekt") version "1.23.7"
 }
 
