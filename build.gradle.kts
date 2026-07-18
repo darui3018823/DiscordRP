@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.intellij.platform") version "2.16.0"
+    id("org.jetbrains.intellij.platform") version "2.18.1"
     kotlin("jvm") version "2.4.10"
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
 }
