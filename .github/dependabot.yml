@@ -2,10 +2,14 @@ version: 2
 updates:
   - package-ecosystem: gradle
     directory: "/"
+    assignees:
+      - "darui3018823"
     schedule:
       interval: weekly
 
   - package-ecosystem: github-actions
     directory: "/"
+    assignees:
+      - "darui3018823"
     schedule:
       interval: weekly
