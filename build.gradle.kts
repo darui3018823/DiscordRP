@@ -20,7 +20,7 @@ dependencies {
         intellijIdeaCommunity("2024.3.5")
         bundledPlugin("Git4Idea")
     }
-    implementation("org.json:json:20260719")
+    implementation("org.json:json:20260814")
 }
 
 intellijPlatform {
